@@ -47,6 +47,7 @@ _start:	b	start_code
 	ldr	pc, _irq
 	ldr	pc, _fiq
 
+#ifndef CONFIG_SPL_BUILD
 _undefined_instruction:	.word undefined_instruction
 _software_interrupt:	.word software_interrupt
 _prefetch_abort:	.word prefetch_abort
@@ -54,6 +55,15 @@ _data_abort:		.word data_abort
 _not_used:		.word not_used
 _irq:			.word irq
 _fiq:			.word fiq
+#else
+_undefined_instruction:	.word hang
+_software_interrupt:	.word hang
+_prefetch_abort:	.word hang
+_data_abort:		.word hang
+_not_used:		.word hang
+_irq:			.word hang
+_fiq:			.word hang
+#endif
 
 	.balignl 16,0xdeadbeef
 
@@ -453,6 +463,7 @@ cpu_init_crit:
 	ldr	sp, FIQ_STACK_START
 	.endm
 
+#ifndef CONFIG_SPL_BUILD
 /*
  * exception handlers
  */
@@ -518,3 +529,4 @@ fiq:
 	bl	do_fiq
 
 #endif
+#endif /* CONFIG_SPL_BUILD*/
