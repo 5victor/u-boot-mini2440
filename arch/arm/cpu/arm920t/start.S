@@ -177,6 +177,12 @@ copyex:
 	str	r1, [r0]
 # endif
 
+# if defined(CONFIG_S3C2440)
+	ldr	r1, =0xFFFF
+	ldr	r0, =INTSUBMSK
+	str	r1, [r0]
+# endif
+
 	/* FCLK:HCLK:PCLK = 1:2:4 */
 	/* default FCLK is 120 MHz ! */
 	ldr	r0, =CLKDIVN
@@ -285,9 +291,10 @@ clbss_l:str	r2, [r0]		/* clear loop...		    */
 	add	r0, r0, #4
 	cmp	r0, r1
 	bne	clbss_l
-
+#ifndef CONFIG_S3C2440
 	bl coloured_LED_init
 	bl red_led_on
+#endif
 #endif
 
 /*

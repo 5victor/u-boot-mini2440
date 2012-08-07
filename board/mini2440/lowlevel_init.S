@@ -111,7 +111,7 @@
 
 #define B6_MT			0x3	/* SDRAM */
 #define B6_Trcd			0x1
-#define B6_SCAN			0x1	/* 9bit */
+#define B6_SCAN			0x0	/* 9bit */
 
 #define B7_MT			0x3	/* SDRAM */
 #define B7_Trcd			0x1	/* 3clk */
@@ -126,17 +126,17 @@
 #define REFCNT			1113	/* period=15.6us, HCLK=60Mhz, (2048+1-15.6*60) */
 /**************************************/
 
-_TEXT_BASE:
-	.word	CONFIG_SYS_TEXT_BASE
-
 .globl lowlevel_init
 lowlevel_init:
 	/* memory control configuration */
 	/* make r0 relative the current location so that it */
 	/* reads SMRDATA out of FLASH rather than memory ! */
 	ldr     r0, =SMRDATA
-	ldr	r1, _TEXT_BASE
-	sub	r0, r0, r1
+addr:
+	sub	r3, pc, #8
+	ldr	r1, =addr
+	sub	r3, r1, r3
+	sub	r0, r0, r3
 	ldr	r1, =BWSCON	/* Bus Width Status Controller */
 	add     r2, r0, #13*4
 0:
