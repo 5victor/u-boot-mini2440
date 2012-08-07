@@ -106,10 +106,14 @@ $(OBJTREE)/MLO:	$(obj)u-boot-spl.bin
 endif
 
 ALL-y	+= $(obj)u-boot-spl.bin
+ALL-y	+= $(obj)spl-u-boot.bin
 
 ifdef CONFIG_SAMSUNG
 ALL-y	+= $(obj)$(BOARD)-spl.bin
 endif
+
+SEEK_SIZE := $(shell expr $(CONFIG_SYS_NAND_U_BOOT_OFFS) \
+			/ $(CONFIG_SYS_NAND_PAGE_SIZE))
 
 all:	$(ALL-y)
 
@@ -121,6 +125,10 @@ endif
 
 $(obj)u-boot-spl.bin:	$(obj)u-boot-spl
 	$(OBJCOPY) $(OBJCFLAGS) -O binary $< $@
+
+$(obj)spl-u-boot.bin:	$(obj)u-boot-spl.bin ../u-boot.bin
+	dd if=$(obj)u-boot-spl.bin of=$@ bs=4096 count=1
+	dd if=../u-boot.bin of=$@ bs=$(CONFIG_SYS_NAND_PAGE_SIZE) seek=$(SEEK_SIZE)
 
 GEN_UBOOT = \
 	UNDEF_SYM=`$(OBJDUMP) -x $(LIBS) | \
