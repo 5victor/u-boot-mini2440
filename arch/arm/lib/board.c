@@ -425,7 +425,7 @@ void board_init_f(ulong bootflag)
 	debug("relocation Offset is: %08lx\n", gd->reloc_off);
 	memcpy(id, (void *)gd, sizeof(gd_t));
 
-	relocate_code(addr_sp, id, addr);
+	relocate_code(addr_sp, id, CONFIG_SYS_TEXT_BASE);
 
 	/* NOTREACHED - relocate_code() does not return */
 }

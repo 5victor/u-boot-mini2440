@@ -110,8 +110,8 @@
 #define B5_PMC			0x0	/* normal */
 
 #define B6_MT			0x3	/* SDRAM */
-#define B6_Trcd			0x1
-#define B6_SCAN			0x0	/* 9bit */
+#define B6_Trcd			0x2
+#define B6_SCAN			0x1	/* 9bit */
 
 #define B7_MT			0x3	/* SDRAM */
 #define B7_Trcd			0x1	/* 3clk */

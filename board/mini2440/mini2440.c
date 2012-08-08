@@ -34,13 +34,13 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #define FCLK_SPEED 1
 
-#if FCLK_SPEED==0		/* Fout = 203MHz, Fin = 12MHz for Audio */
-#define M_MDIV	0xC3
-#define M_PDIV	0x4
-#define M_SDIV	0x1
-#elif FCLK_SPEED==1		/* Fout = 202.8MHz */
-#define M_MDIV	0xA1
-#define M_PDIV	0x3
+#if FCLK_SPEED==0		/* Fout = 271.5MHz, Fin = 12MHz for Audio */
+#define M_MDIV	0xad
+#define M_PDIV	0x2
+#define M_SDIV	0x2
+#elif FCLK_SPEED==1		/* Fout = 405MHz */
+#define M_MDIV	0x7f
+#define M_PDIV	0x2
 #define M_SDIV	0x1
 #endif
 
@@ -73,15 +73,15 @@ int board_early_init_f(void)
 					s3c24x0_get_base_clock_power();
 	struct s3c24x0_gpio * const gpio = s3c24x0_get_base_gpio();
 
+	writel(0x00000005, &clk_power->clkdivn);
+	writel(0, &clk_power->camdivn);
+
+	__asm__("mrc p15, 0, r0, c1, c0, 0\n"
+		"orr r0, r0, #0xC0000000\n"
+		"mcr p15, 0, r0, c1, c0, 0\n":::"r0");
+
 	/* to reduce PLL lock time, adjust the LOCKTIME register */
 	writel(0xFFFFFF, &clk_power->locktime);
-
-	/* configure MPLL */
-	writel((M_MDIV << 12) + (M_PDIV << 4) + M_SDIV,
-	       &clk_power->mpllcon);
-
-	/* some delay between MPLL and UPLL */
-	pll_delay(4000);
 
 	/* configure UPLL */
 	writel((U_M_MDIV << 12) + (U_M_PDIV << 4) + U_M_SDIV,
@@ -89,6 +89,13 @@ int board_early_init_f(void)
 
 	/* some delay between MPLL and UPLL */
 	pll_delay(8000);
+
+	/* configure MPLL */
+	writel((M_MDIV << 12) + (M_PDIV << 4) + M_SDIV,
+	       &clk_power->mpllcon);
+
+	/* some delay between MPLL and UPLL */
+	pll_delay(4000);
 
 	/* set up the I/O ports */
 	writel(0x007FFFFF, &gpio->gpacon);
@@ -146,6 +153,9 @@ int board_eth_init(bd_t *bis)
  * Hardcoded flash setup:
  * Flash 0 is a non-CFI AMD AM29LV800BB flash.
  */
+
+#ifndef CONFIG_SYS_NO_FLASH
+
 ulong board_flash_get_legacy(ulong base, int banknum, flash_info_t *info)
 {
 	info->portwidth = FLASH_CFI_16BIT;
@@ -153,3 +163,5 @@ ulong board_flash_get_legacy(ulong base, int banknum, flash_info_t *info)
 	info->interface = FLASH_CFI_X16;
 	return 1;
 }
+
+#endif

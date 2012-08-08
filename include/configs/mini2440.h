@@ -29,6 +29,8 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+#define DEBUG
+
 /*
  * High Level Configuration Options
  * (easy to change)
@@ -124,6 +126,9 @@
 #define CONFIG_BOOTP_GATEWAY
 #define CONFIG_BOOTP_HOSTNAME
 
+/* Do Not USE NOR FLASH */
+#define CONFIG_SYS_NO_FLASH
+
 /*
  * Command line configuration.
  */
@@ -206,14 +211,16 @@
 #define CONFIG_NR_DRAM_BANKS	1          /* we have 1 bank of DRAM */
 #define PHYS_SDRAM_1		0x30000000 /* SDRAM Bank #1 */
 #define PHYS_SDRAM_1_SIZE	0x04000000 /* 64 MB */
-#define PHYS_FLASH_1		0x00000000 /* Flash Bank #0 */
 
-#define CONFIG_SYS_FLASH_BASE	PHYS_FLASH_1
+/*#define PHYS_FLASH_1		0x00000000 */ /* Flash Bank #0 */
+
+/*#define CONFIG_SYS_FLASH_BASE	PHYS_FLASH_1*/
 
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
 
+/*
 #define CONFIG_SYS_FLASH_CFI
 #define CONFIG_FLASH_CFI_DRIVER
 #define CONFIG_FLASH_CFI_LEGACY
@@ -223,11 +230,15 @@
 #define CONFIG_SYS_MAX_FLASH_BANKS	1
 #define CONFIG_SYS_FLASH_BANKS_LIST     { CONFIG_SYS_FLASH_BASE }
 #define CONFIG_SYS_MAX_FLASH_SECT	(19)
+*/
 
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_U_BOOT_OFFS \
 					+ CONFIG_SYS_NAND_U_BOOT_SIZE)
 #define CONFIG_ENV_IS_IN_NAND
 #define CONFIG_ENV_SIZE			CONFIG_SYS_NAND_BLOCK_SIZE
+
+/*#define	CONFIG_NAND_ENV_DST
+*/
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 
