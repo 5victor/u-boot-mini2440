@@ -29,7 +29,7 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define DEBUG
+/* #define DEBUG*/
 
 /*
  * High Level Configuration Options
@@ -259,6 +259,7 @@
 #define CONFIG_SYS_MAX_NAND_DEVICE	1
 #define NAND_MAX_CHIPS			1
 #define CONFIG_SYS_NAND_BASE		0x4E000000
+#define CONFIG_S3C2440_NAND_BBT
 #endif
 
 /*

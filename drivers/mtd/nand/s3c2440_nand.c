@@ -50,22 +50,22 @@ static void s3c2440_hwcontrol(struct mtd_info *mtd, int cmd, unsigned int ctrl)
 {
 	struct nand_chip *chip = mtd->priv;
 	struct s3c2440_nand *nand = s3c2440_get_base_nand();
-	ulong IO_ADDR_W;
+	static ulong IO_ADDR_W;
 
 	debug("hwcontrol(): 0x%02x 0x%02x\n", cmd, ctrl);
 
 	if (ctrl & NAND_CTRL_CHANGE) {
 		if (ctrl & NAND_CLE)
-			IO_ADDR_W = nand->nfcmd;
+			IO_ADDR_W = &nand->nfcmd;
 		else if (ctrl & NAND_ALE)
-			IO_ADDR_W = nand->nfaddr;
+			IO_ADDR_W = &nand->nfaddr;
 
 		if (ctrl & NAND_NCE)
-			writel(readl(&nand->nfconf) & ~S3C2440_NFCONT_nFCE,
-			       &nand->nfconf);
+			writel(readl(&nand->nfcont) & ~S3C2440_NFCONT_nFCE,
+			       &nand->nfcont);
 		else
-			writel(readl(&nand->nfconf) | S3C2440_NFCONT_nFCE,
-			       &nand->nfconf);
+			writel(readl(&nand->nfcont) | S3C2440_NFCONT_nFCE,
+			       &nand->nfcont);
 	}
 
 	if (cmd != NAND_CMD_NONE)
