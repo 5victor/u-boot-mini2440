@@ -35,8 +35,10 @@
 #include <asm/io.h>
 #include <asm/arch/s3c24x0_cpu.h>
 
-int timer_load_val = 0;
-static ulong timer_clk;
+#define	__init_f_data	__attribute__ ((section (".data")))
+
+int timer_load_val __init_f_data = 0;
+static ulong timer_clk __init_f_data;
 
 /* macro to read the 16 bit timer */
 static inline ulong READ_TIMER(void)
