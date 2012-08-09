@@ -92,9 +92,13 @@
 /*
  * Hardware drivers
  */
-#define CONFIG_CS8900		/* we have a CS8900 on-board */
-#define CONFIG_CS8900_BASE	0x19000300
-#define CONFIG_CS8900_BUS16	/* the Linux driver does accesses as shorts */
+#define CONFIG_DRIVER_DM9000
+#define CONFIG_DM9000_BASE              0x20000300
+#define DM9000_IO                       CONFIG_DM9000_BASE
+#define DM9000_DATA                     (CONFIG_DM9000_BASE + 4)
+#define CONFIG_DM9000_USE_16BIT
+#define CONFIG_DM9000_NO_SROM
+#define CONFIG_NET_RETRY_COUNT          20
 
 /*
  * select serial console configuration
@@ -147,6 +151,7 @@
 #define CONFIG_SYS_HUSH_PARSER
 #define CONFIG_SYS_PROMPT_HUSH_PS2	"> "
 #define CONFIG_CMDLINE_EDITING
+#define CONFIG_AUTO_COMPLETE
 
 /* autoboot */
 #define CONFIG_BOOTDELAY	5
@@ -232,11 +237,11 @@
 #define CONFIG_SYS_MAX_FLASH_SECT	(19)
 */
 
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_U_BOOT_OFFS \
-					+ CONFIG_SYS_NAND_U_BOOT_SIZE)
+/* use second block*/
+#define CONFIG_ENV_OFFSET		CONFIG_SYS_NAND_BLOCK_SIZE 	
 #define CONFIG_ENV_IS_IN_NAND
-#define CONFIG_ENV_SIZE			CONFIG_SYS_NAND_BLOCK_SIZE
-
+#define CONFIG_ENV_RANGE		CONFIG_SYS_NAND_BLOCK_SIZE
+#define CONFIG_ENV_SIZE			(CONFIG_SYS_NAND_PAGE_SIZE * 5)
 /*#define	CONFIG_NAND_ENV_DST
 */
 /* allow to overwrite serial and ethaddr */
