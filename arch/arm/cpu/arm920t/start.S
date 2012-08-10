@@ -183,11 +183,34 @@ copyex:
 	str	r1, [r0]
 # endif
 
+#ifdef CONFIG_S3C2440
+#define CAMDIVN		0x4C000018
+#define MPLLCON		0x4C000004
+
+	ldr	r0, =CLKDIVN
+	mov	r1, #5
+	str	r1, [r0]
+	ldr	r0, =CAMDIVN
+	mov	r1, #0
+	str	r1, [r0]
+	ldr	r0, =MPLLCON
+	ldr	r1, =0x0007F021
+	str	r1, [r0]
+	mov	r0, #1000
+0:
+	sub	r0, r0, #1
+	cmp	r0, #0
+	bne	0b
+	mrc	p15, 0, r0, c1, c0, 0
+	orr	r0, r0, #0xC0000000
+	mcr	p15, 0, r0, c1, c0, 0
+#else
 	/* FCLK:HCLK:PCLK = 1:2:4 */
 	/* default FCLK is 120 MHz ! */
 	ldr	r0, =CLKDIVN
 	mov	r1, #3
 	str	r1, [r0]
+#endif  /* CONFIG_S3C2440 */
 #endif	/* CONFIG_S3C24X0 */
 
 	/*

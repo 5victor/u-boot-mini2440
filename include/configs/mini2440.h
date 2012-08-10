@@ -99,6 +99,7 @@
 #define CONFIG_DM9000_USE_16BIT
 #define CONFIG_DM9000_NO_SROM
 #define CONFIG_NET_RETRY_COUNT          20
+#define CONFIG_ETHADDR			"00:1e:ec:0d:1f:5f"
 
 /*
  * select serial console configuration
@@ -154,14 +155,14 @@
 #define CONFIG_AUTO_COMPLETE
 
 /* autoboot */
-#define CONFIG_BOOTDELAY	5
+#define CONFIG_BOOTDELAY	3
 #define CONFIG_BOOT_RETRY_TIME	-1
 #define CONFIG_RESET_TO_RETRY
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 
 #define CONFIG_NETMASK		255.255.255.0
-#define CONFIG_IPADDR		10.0.0.110
-#define CONFIG_SERVERIP		10.0.0.1
+#define CONFIG_IPADDR		10.10.10.100
+#define CONFIG_SERVERIP		10.10.10.1
 
 #if defined(CONFIG_CMD_KGDB)
 #define CONFIG_KGDB_BAUDRATE	115200	/* speed to run kgdb serial port */
@@ -238,7 +239,7 @@
 */
 
 /* use second block*/
-#define CONFIG_ENV_OFFSET		CONFIG_SYS_NAND_BLOCK_SIZE 	
+#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 7) 	
 #define CONFIG_ENV_IS_IN_NAND
 #define CONFIG_ENV_RANGE		CONFIG_SYS_NAND_BLOCK_SIZE
 #define CONFIG_ENV_SIZE			(CONFIG_SYS_NAND_PAGE_SIZE * 5)
