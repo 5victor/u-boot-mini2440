@@ -370,11 +370,11 @@ static int dm9000_init(struct eth_device *dev, bd_t *bd)
 
 	i = 0;
 	while (!(dm9000_phy_read(1) & 0x20)) {	/* autonegation complete bit */
-		udelay(1000);
+		udelay(100);
 		i++;
 		if (i == 10000) {
 			printf("could not establish link\n");
-			return 0;
+			break;
 		}
 	}
 
