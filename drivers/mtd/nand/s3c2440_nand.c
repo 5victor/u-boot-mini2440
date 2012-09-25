@@ -25,7 +25,7 @@
 #include <asm/io.h>
 
 #define S3C2440_NFCONT_EN          (1<<0)
-#define S3C2440_NFCONF_INITECC     (1<<4)
+#define S3C2440_NFCONT_INITECC     (1<<4)
 #define S3C2440_NFCONT_nFCE        (1<<1)
 #define S3C2440_NFCONF_TACLS(x)    ((x)<<12)
 #define S3C2440_NFCONF_TWRPH0(x)   ((x)<<8)
@@ -91,9 +91,12 @@ static int s3c2440_nand_calculate_ecc(struct mtd_info *mtd, const u_char *dat,
 				      u_char *ecc_code)
 {
 	struct s3c2440_nand *nand = s3c2440_get_base_nand();
-	ecc_code[0] = readb(&nand->nfecc);
-	ecc_code[1] = readb(&nand->nfecc + 1);
-	ecc_code[2] = readb(&nand->nfecc + 2);
+	unsigned long nfmecc0 = readl(&nand->nfmecc0);
+
+	ecc_code[0] = nfmecc0 & 0xFF;
+	ecc_code[1] = (nfmecc0 >> 8) & 0xFF;
+	ecc_code[2] = (nfmecc0 >> 16) & 0xFF;
+
 	debug("s3c2410_nand_calculate_hwecc(%p,): 0x%02x 0x%02x 0x%02x\n",
 	       mtd , ecc_code[0], ecc_code[1], ecc_code[2]);
 
@@ -108,7 +111,6 @@ static int s3c2440_nand_correct_data(struct mtd_info *mtd, u_char *dat,
 	    read_ecc[2] == calc_ecc[2])
 		return 0;
 
-	printf("s3c2410_nand_correct_data: not implemented\n");
 	return -1;
 }
 #endif
@@ -166,7 +168,6 @@ int board_nand_init(struct nand_chip *nand)
 	nand->dev_ready = s3c2440_dev_ready;
 
 #ifdef CONFIG_S3C2440_NAND_HWECC
-#error "not impletion ecc calculate"
 	nand->ecc.hwctl = s3c2440_nand_enable_hwecc;
 	nand->ecc.calculate = s3c2440_nand_calculate_ecc;
 	nand->ecc.correct = s3c2440_nand_correct_data;
