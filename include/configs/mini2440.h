@@ -289,4 +289,12 @@
 
 #define CONFIG_BOARD_EARLY_INIT_F
 
+#define CONFIG_MTDPARTS	"mtdparts=s3c2440_nand:5m(u-boot),10m(kernel),50m(rootfs)"
+#define CONFIG_MTDIDS	"nand0=s3c2440_nand"
+
+#define CONFIG_BOOTARGS "ubi.mtd=rootfs root=ubi0:rootfs rootfstype=ubifs" \
+			" console=ttySAC0,115200"
+
+#define CONFIG_MACHID	0x7cf
+
 #endif /* __CONFIG_H */

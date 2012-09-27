@@ -119,6 +119,15 @@ const uchar default_environment[] = {
 #ifdef	CONFIG_EXTRA_ENV_SETTINGS
 	CONFIG_EXTRA_ENV_SETTINGS
 #endif
+#ifdef  CONFIG_MTDPARTS
+	"mtdparts="	CONFIG_MTDPARTS			"\0"
+#endif
+#ifdef  CONFIG_MTDIDS
+	"mtdids="	CONFIG_MTDIDS			"\0"
+#endif
+#ifdef  CONFIG_MACHID
+	"machid="	MK_STR(CONFIG_MACHID)		"\0"
+#endif
 	"\0"
 };
 
